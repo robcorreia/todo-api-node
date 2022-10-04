@@ -50,4 +50,12 @@ export const update = async (req: Request, res: Response) => {
   }
 };
 
-export const remove = async (req: Request, res: Response) => {};
+export const remove = async (req: Request, res: Response) => {
+  const id: string = req.params.id;
+
+  let task = await Todo.findByPk(id);
+  if (task) {
+    await task.destroy();
+  }
+  res.json({});
+};
