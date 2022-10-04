@@ -21,6 +21,33 @@ export const add = async (req: Request, res: Response) => {
   }
 };
 
-export const update = async () => {};
+export const update = async (req: Request, res: Response) => {
+  const id: string = req.params.id;
 
-export const remove = async () => {};
+  let task = await Todo.findByPk(id);
+
+  if (task) {
+    if (req.body.title) {
+      task.title = req.body.title;
+    }
+
+    if (req.body.done) {
+      switch (req.body.done.toLowerCase()) {
+        case "true":
+        case "1":
+          task.done = true;
+          break;
+        case "false":
+        case "0":
+          task.done = false;
+          break;
+      }
+    }
+    await task.save();
+    res.json({ item: task });
+  } else {
+    res.json({ error: "Item não encontrado" });
+  }
+};
+
+export const remove = async (req: Request, res: Response) => {};
